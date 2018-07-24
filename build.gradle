@@ -1,0 +1,39 @@
+
+apply plugin: 'eclipse'
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'war'
+
+version = '0.0.1'
+group = 'wellsb1'
+
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
+repositories { 
+   mavenLocal()
+   mavenCentral() 
+   maven { url 'https://jitpack.io' }
+}
+
+
+dependencies {
+
+	compile  group: 'mysql', name: 'mysql-connector-java', version: '5.1.40'
+    compile("com.github.wellsb1:fort_j:release-1.0.x-SNAPSHOT") { changing = true }
+    compile("com.github.wellsb1:fort_s:release-1.0.x-SNAPSHOT") { changing = true }
+    compile("com.github.wellsb1:fort_w:release-1.0.x-SNAPSHOT") { changing = true }
+
+}
+
+
+task buildZip(type: Zip) {
+    from compileJava
+    from processResources              
+    into('lib') {
+        from configurations.runtime
+    }           
+}
+
+build.dependsOn buildZip
